@@ -9,7 +9,10 @@ phases:
       - AWS_SECRET_ACCESS_KEY=`jq -r '.SecretAccessKey' aws_credentials.json`
       - AWS_SESSION_TOKEN=`jq -r '.Token' aws_credentials.json`
       # aws-nukeのダウンロード
-      - wget -q https://github.com/rebuy-de/aws-nuke/releases/download/${AWS_NUKE_VERSION}/aws-nuke-${AWS_NUKE_VERSION}-linux-amd64 -O aws-nuke
+      - wget -q https://github.com/rebuy-de/aws-nuke/releases/download/${AWS_NUKE_VERSION}/aws-nuke-${AWS_NUKE_VERSION}-linux-amd64.tar.gz
+      # バイナリはdistというディレクトリの下にあるので`--strip-components 1`をつけて親ディレクトリを捨てる
+      - tar -zxf aws-nuke-${AWS_NUKE_VERSION}-linux-amd64.tar.gz --strip-components 1
+      - mv aws-nuke-${AWS_NUKE_VERSION}-linux-amd64 aws-nuke
       - chmod u+x aws-nuke
       # aws-nuke設定ファイル取得
       - aws s3 cp s3://${NUKE_CONFIG_BUCKET_ID}/nuke-config.yaml .
